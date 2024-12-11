@@ -39,13 +39,17 @@
             margin: 0 auto;
         }
 
+        /* Modern User Card Styles */
         .user-card {
+            /*background: rgba(251, 106, 110, 0.5);*/
             border-radius: 1rem;
             padding: 1.5rem;
+            /*box-shadow: var(--shadow);*/
             margin-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            /*backdrop-filter: blur(10px);*/
             border: 1.5px solid #0f172a;
         }
 
@@ -96,6 +100,7 @@
             transform: rotate(45deg);
         }
 
+        /* Modern Day End Button */
         .day-end-btn {
             display: block;
             margin: 1.5rem auto;
@@ -116,10 +121,13 @@
             box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
         }
 
+        /* Modern Notice Area */
         .notice-area {
+            /*background: var(--card-bg);*/
             border-radius: 1rem;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
+            /*box-shadow: var(--shadow);*/
             border: 1.5px solid #0f172a;
         }
 
@@ -132,12 +140,14 @@
         .notice-item {
             padding: 1rem;
             border-radius: 0.75rem;
+            /*background: rgba(99, 102, 241, 0.05);*/
             transition: all 0.3s;
             border: 1px solid #0f172a;
         }
 
         .notice-item:hover {
             transform: translateY(-2px);
+            /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);*/
         }
 
         .notice-item h4 {
@@ -152,78 +162,15 @@
             font-size: 0.875rem;
         }
 
+        /* Modern Calendar Grid */
         .calendar-container {
+            /*background: var(--card-bg);*/
             border-radius: 1rem;
-            padding: 2rem;
+            padding: 1rem;
+            /*box-shadow: var(--shadow);*/
             overflow-x: auto;
             border: 1.5px solid #0f172a;
             display: flex;
-            flex-direction: column;
-        }
-
-        .calendar-labels {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .year-labels {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            min-width: 120px;
-        }
-
-        .axis-title {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .years {
-            display: grid;
-            gap: 4px;
-            padding: 0.5rem 1rem;
-        }
-
-        .year-label {
-            height: 14px;
-            line-height: 14px;
-            font-size: 0.7rem;
-            color: var(--text-color);
-        }
-
-        .week-labels {
-            flex: 1;
-        }
-
-        .months-container {
-            margin-bottom: 0.5rem;
-        }
-
-        .months {
-            display: flex;
-            padding-left: 0.5rem;
-        }
-
-        .month-label {
-            font-size: 0.7rem;
-            color: var(--text-color);
-            text-transform: lowercase;
-            width: 48px;
-        }
-
-        .week-numbers {
-            display: flex;
-            padding-left: 0.5rem;
-            gap: 4px;
-        }
-
-        .week-number {
-            width: 12px;
-            font-size: 0.6rem;
-            color: var(--text-color);
-            text-align: center;
         }
 
         .calendar-grid {
@@ -261,6 +208,7 @@
             100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
         }
 
+        /* Modern Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -328,6 +276,7 @@
             background: #cbd5e1;
         }
 
+        /* Modern Tooltip */
         .tooltip {
             position: absolute;
             background: rgba(15, 23, 42, 0.9);
@@ -347,11 +296,18 @@
                 padding: 1rem;
             }
 
-            .user-card {
+           l .user-card {
                 flex-direction: column;
                 text-align: center;
                 padding: 1rem;
             }
+
+            /*
+
+            .user-info {
+                flex-direction: column;
+            }
+            */
 
             .calendar-grid {
                 grid-template-columns: repeat(52, 14px);
@@ -365,8 +321,10 @@
         }
     </style>
 </head>
+    
 <body>
     <div class="container">
+        <!-- User Card -->
         <div class="user-card">
             <div class="user-info">
                 <div class="avatar">
@@ -383,10 +341,12 @@
             </button>
         </div>
 
+        <!-- Day End Button -->
         <button class="day-end-btn" onclick="markDayEnd()">
             Day End
         </button>
 
+        <!-- Notice Area -->
         <div class="notice-area">
             <div class="notice-grid">
                 <div class="notice-item">
@@ -408,24 +368,13 @@
             </div>
         </div>
 
+        <!-- Calendar Grid -->
         <div class="calendar-container">
-            <div class="calendar-labels">
-                <div class="year-labels">
-                    <div class="axis-title">YEARS OF YOUR LIFE</div>
-                    <div class="years"></div>
-                </div>
-                <div class="week-labels">
-                    <div class="months-container">
-                        <div class="axis-title">WEEKS OF THE YEAR</div>
-                        <div class="months"></div>
-                    </div>
-                    <div class="week-numbers"></div>
-                </div>
-            </div>
             <div class="calendar-grid" id="calendarGrid"></div>
         </div>
     </div>
 
+    <!-- Settings Modal -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">
             <h3>Update Settings</h3>
@@ -437,29 +386,33 @@
         </div>
     </div>
 
+    <!-- Tooltip -->
     <div class="tooltip" id="tooltip"></div>
 
     <script>
+        // User data structure
         let userData = {
             name: 'John Doe',
             dob: '1999-01-01',
             lifespan: 90
         };
 
+        // Load data from localStorage
         function loadUserData() {
             const savedData = localStorage.getItem('lifeCalendarData');
             if (savedData) {
                 userData = JSON.parse(savedData);
                 updateUserCard();
                 generateCalendar();
-                generateLabels();
             }
         }
 
+        // Save data to localStorage
         function saveUserData() {
             localStorage.setItem('lifeCalendarData', JSON.stringify(userData));
         }
 
+        // Calculate weeks lived
         function calculateWeeksLived() {
             const dob = new Date(userData.dob);
             const now = new Date();
@@ -467,6 +420,7 @@
             return Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
         }
 
+        // Generate calendar grid
         function generateCalendar() {
             const grid = document.getElementById('calendarGrid');
             grid.innerHTML = '';
@@ -485,6 +439,7 @@
                     weekBox.classList.add('week-future');
                 }
 
+                // Add week information for tooltip
                 weekBox.setAttribute('data-week', week + 1);
                 weekBox.setAttribute('data-dates', getWeekDates(week));
                 
@@ -494,12 +449,14 @@
                 grid.appendChild(weekBox);
             }
 
+            // Scroll to current week
             const currentWeek = document.querySelector('.week-current');
             if (currentWeek) {
                 currentWeek.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
+        // Get dates for specific week
         function getWeekDates(weekNumber) {
             const dob = new Date(userData.dob);
             const weekStart = new Date(dob.getTime() + weekNumber * 7 * 24 * 60 * 60 * 1000);
@@ -507,6 +464,7 @@
             return `${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
         }
 
+        // Tooltip functions
         function showTooltip(e) {
             const tooltip = document.getElementById('tooltip');
             tooltip.innerHTML = `Week ${e.target.getAttribute('data-week')}<br>${e.target.getAttribute('data-dates')}`;
@@ -519,20 +477,25 @@
             document.getElementById('tooltip').style.display = 'none';
         }
 
+        // Update user card information
         function updateUserCard() {
-            document.getElementById('userName').textContent = userData.name;
-            const age = calculateAge();
-            document.getElementById('userAge').textContent = `Age: ${age}`;
+    document.getElementById('userName').textContent = userData.name;
+    const age = calculateAge();
+    document.getElementById('userAge').textContent = `Age: ${age}`;
 
-            const dobFormatted = new Date(userData.dob).toLocaleDateString('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric'
-            });
+    // Format the DOB to Month Date, Year
+    const dobFormatted = new Date(userData.dob).toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
 
-            document.getElementById('userDOB').textContent = `DOB: ${dobFormatted}`;
-        }
+    document.getElementById('userDOB').textContent = `DOB: ${dobFormatted}`;
+}
 
+
+
+        // Calculate age
         function calculateAge() {
             const dob = new Date(userData.dob);
             const now = new Date();
@@ -544,6 +507,7 @@
             return age;
         }
 
+        // Modal functions
         function openModal() {
             document.getElementById('settingsModal').style.display = 'flex';
             document.getElementById('nameInput').value = userData.name;
@@ -563,39 +527,47 @@
             saveUserData();
             updateUserCard();
             generateCalendar();
-            generateLabels();
             updateNotices();
             closeModal();
         }
 
+        // Day End function
         function markDayEnd() {
-            const notice = document.createElement('div');
-            notice.className = 'notice-item';
+    const notice = document.createElement('div');
+    notice.className = 'notice-item';
 
-            const formattedDate = new Date().toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric'
-            });
+    // Format the current date as Weekday, Month Date, Year
+    const formattedDate = new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
 
-            notice.innerHTML = `<h4>Day Completed</h4><p>You've completed another day! ${formattedDate}</p>`;
-            
-            const noticeGrid = document.querySelector('.notice-grid');
-            noticeGrid.insertBefore(notice, noticeGrid.firstChild);
+    notice.innerHTML = `<h4>Day Completed</h4><p>You've completed another day! ${formattedDate}</p>`;
+    
+    // Insert at the beginning of the notice grid
+    const noticeGrid = document.querySelector('.notice-grid');
+    noticeGrid.insertBefore(notice, noticeGrid.firstChild);
 
-            const now = new Date();
-            const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
-            const msUntilEndOfDay = endOfDay - now;
+    // Calculate milliseconds until the end of today
+    const now = new Date();
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    const msUntilEndOfDay = endOfDay - now;
 
-            setTimeout(() => {
-                notice.remove();
-            }, msUntilEndOfDay);
-        }
+    // Remove the notice at the end of the day
+    setTimeout(() => {
+        notice.remove();
+    }, msUntilEndOfDay);
+}
+
+
+        // Update notices
 
         function updateNotices() {
             const now = new Date();
             
+            // Current date
             document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', { 
                 weekday: 'long', 
                 year: 'numeric', 
@@ -603,13 +575,16 @@
                 day: 'numeric' 
             });
             
+            // Weeks left in month
             const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
             const weeksLeft = Math.ceil((lastDayOfMonth.getDate() - now.getDate()) / 7);
             document.getElementById('weeksLeftMonth').textContent = `${weeksLeft} weeks`;
             
+            // Months left in year
             const monthsLeft = 12 - (now.getMonth() + 1);
             document.getElementById('monthsLeftYear').textContent = `${monthsLeft} months`;
             
+            // Birthday countdown - only show if within 2 months
             const birthday = new Date(userData.dob);
             const nextBirthday = new Date(now.getFullYear(), birthday.getMonth(), birthday.getDate());
             
@@ -628,41 +603,11 @@
             }
         }
 
-        function generateLabels() {
-            const yearsContainer = document.querySelector('.years');
-            yearsContainer.innerHTML = '';
-            for (let year = 0; year < userData.lifespan; year++) {
-                const yearLabel = document.createElement('div');
-                yearLabel.className = 'year-label';
-                yearLabel.textContent = year;
-                yearsContainer.appendChild(yearLabel);
-            }
-
-            const monthsContainer = document.querySelector('.months');
-            monthsContainer.innerHTML = '';
-            const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-            months.forEach(month => {
-                const monthLabel = document.createElement('div');
-                monthLabel.className = 'month-label';
-                monthLabel.textContent = month;
-                monthsContainer.appendChild(monthLabel);
-            });
-
-            const weekNumbersContainer = document.querySelector('.week-numbers');
-            weekNumbersContainer.innerHTML = '';
-            for (let week = 1; week <= 52; week++) {
-                const weekNumber = document.createElement('div');
-                weekNumber.className = 'week-number';
-                weekNumber.textContent = week;
-                weekNumbersContainer.appendChild(weekNumber);
-            }
-        }
-
+        // Initialize the app
         window.addEventListener('load', () => {
             loadUserData();
-            generateLabels();
             updateNotices();
-            setInterval(updateNotices, 60000);
+            setInterval(updateNotices, 60000); // Update notices every minute
         });
     </script>
 </body>
