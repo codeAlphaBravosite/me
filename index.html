@@ -167,7 +167,7 @@
             /*background: var(--card-bg);*/
             border-radius: 1rem;
             display: flex;
-            gap: 1rem;
+            /*gap: 1rem;*/
             padding: 1.5rem;
             /*box-shadow: var(--shadow);*/
             overflow-x: auto;
@@ -197,10 +197,14 @@
 }
 
 .week-labels {
-    display: grid;
+    /*display: grid;
     grid-template-columns: repeat(52, 12px);
     gap: 4px;
-    margin-left: 0.5rem;
+    margin-left: 0.5rem;*/
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    /*padding-top: 1.5rem;*/
 }
 
 .week-label {
@@ -209,15 +213,12 @@
     text-align: center;
 }
 
-.calendar-grid {
-    margin-top: 0.5rem;
-}
-
         .calendar-grid {
+            /*margin-top: 0.5rem;*/
             display: grid;
             grid-template-columns: repeat(52, 12px);
-            gap: 4px;
-            padding: 0.5rem;
+            /*gap: 4px;
+            padding: 0.5rem;*/
         }
 
         .week-box {
@@ -347,7 +348,7 @@
             .user-info {
                 flex-direction: column;
             }
-            */
+            
 
             .calendar-grid {
                 grid-template-columns: repeat(52, 14px);
@@ -357,7 +358,7 @@
             .week-box {
                 width: 12px;
                 height: 12px;
-            }
+            } */
         }
     </style>
 </head>
