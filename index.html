@@ -533,26 +533,34 @@
 
         // Day End function
         function markDayEnd() {
-            const notice = document.createElement('div');
-            notice.className = 'notice-item';
-            notice.innerHTML = `<h4>Day Completed</h4><p>You've completed another day! (${new Date().toLocaleDateString()})</p>`;
-            
-            // Insert at the beginning of the notice grid
-            const noticeGrid = document.querySelector('.notice-grid');
-            noticeGrid.insertBefore(notice, noticeGrid.firstChild);
-            
-            // Calculate milliseconds until the end of today
-             
-            const noi = new Date();
-            const endOfDayy = new Date(noi.getFullYear(), noi.getMonth(), noi.getDate() + 1, 0, 0, 0, 0);
-            const msUntilEndOfDay = endOfDayy - now;
+    const notice = document.createElement('div');
+    notice.className = 'notice-item';
 
-            // Remove at the end of today
-            setTimeout(() => {
-               notice.remove();
-                 }, msUntilEndOfDay);
-            
-              }
+    // Format the current date as Weekday, Month Date, Year
+    const formattedDate = new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
+
+    notice.innerHTML = `<h4>Day Completed</h4><p>You've completed another day! ${formattedDate}</p>`;
+    
+    // Insert at the beginning of the notice grid
+    const noticeGrid = document.querySelector('.notice-grid');
+    noticeGrid.insertBefore(notice, noticeGrid.firstChild);
+
+    // Calculate milliseconds until the end of today
+    const now = new Date();
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    const msUntilEndOfDay = endOfDay - now;
+
+    // Remove the notice at the end of the day
+    setTimeout(() => {
+        notice.remove();
+    }, msUntilEndOfDay);
+}
+
 
         // Update notices
 
