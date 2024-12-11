@@ -1,1 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Calendar</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --accent-color: #10b981;
+            --lived-week-color: #ec4899;
+            --future-week-color: #e2e8f0;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Modern Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* User Card */
+        .user-card {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 2rem;
+            color: var(--text-muted);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-item i {
+            color: var(--primary-color);
+        }
+
+        /* Modern Button Styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-accent {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        /* Notice Area */
+        .notice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .notice-item {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .notice-icon {
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        /* Calendar Section */
+        .calendar-container {
+            overflow: auto;
+            max-height: calc(100vh - 400px);
+            padding: 1rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(52, 1fr);
+            gap: 3px;
+            padding: 1rem;
+        }
+
+        .year-label {
+            grid-column: 1 / -1;
+            padding: 0.75rem;
+            font-weight: 600;
+            background: #f1f5f9;
+            margin: 0.5rem 0;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .week-box {
+            aspect-ratio: 1;
+            border-radius: 0.25rem;
+            background: var(--future-week-color);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .week-box.lived {
+            background: var(--lived-week-color);
+        }
+
+        .week-box.current {
+            animation: modernGlow 2s ease-in-out infinite alternate;
+        }
+
+        .week-box:hover {
+            transform: scale(1.2);
+            z-index: 1;
+        }
+
+        /* Modern Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Modern Tooltip */
+        .tooltip {
+            position: absolute;
+            background: #1e293b;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            pointer-events: none;
+            display: none;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+        }
+
+        @keyframes modernGlow {
+            from {
+                box-shadow: 0 0 10px rgba(99, 102, 241, 0.3),
+                           0 0 20px rgba(99, 102, 241, 0.2);
+            }
+            to {
+                box-shadow: 0 0 15px rgba(99, 102, 241, 0.4),
+                           0 0 30px rgba(99, 102, 241, 0.3);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .user-card {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-grid {
+                gap: 2px;
+            }
+
+            .notice-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- User Card -->
+        <div class="card user-card">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="userName">John Doe</div>
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-calendar-days"></i>
+                        <span id="userAge">30 years</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="lifeWeek">Week 1560</span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="openSettings()">
+                <i class="fas fa-gear"></i>
+                Settings
+            </button>
+        </div>
+
+        <!-- Day End Button -->
+        <button class="btn btn-accent" onclick="markDayEnd()">
+            <i class="fas fa-moon"></i>
+            Mark Day Complete
+        </button>
+
+        <!-- Notice Area -->
+        <div class="card">
+            <div class="notice-grid">
+                <div class="notice-item" id="currentDate">
+                    <div class="notice-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div>Current Date</div>
+                </div>
+                <div class="notice-item" id="weeksLeft">
+                    <div class="notice-icon">
+                        <i class="fas fa-hourglass"></i>
+                    </div>
+                    <div>Weeks Left</div>
+                </div>
+                <div class="notice-item" id="monthsLeft">
+                    <div class="notice-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>Months Left</div>
+                </div>
+                <div class="notice-item" id="birthdayNotice">
+                    <div class="notice-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <div>Birthday</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Section -->
+        <div class="card calendar-container">
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="btn" onclick="closeSettings()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="nameInput">Name</label>
+                <input type="text" id="nameInput" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="dobInput">Date of Birth</label>
+                <input type="date" id="dobInput" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="lifespanInput">Expected Lifespan (years)</label>
+                <input type="number" id="lifespanInput" class="form-input" min="1" max="120">
+            </div>
+            <button class="btn btn-primary" onclick="saveSettings()">
+                Save Changes
+            </button>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // User data structure
+        let userData = {
+            name: 'John Doe',
+            dob: '1994-01-01',
+            lifespan: 90
+        };
+
+        // Load data from localStorage
+        function loadUserData() {
+            const savedData = localStorage.getItem('lifeCalendarData');
+            if (savedData) {
+                userData = JSON.parse(savedData);
+                updateUI();
+            }
+        }
+
+        // Save data to localStorage
+        function saveUserData() {
+            localStorage.setItem('lifeCalendarData', JSON.stringify(userData));
+        }
+
+        // Calculate weeks lived
+        function calculateWeeksLived() {
+            const dob = new Date(userData.dob);
+            const now = new Date();
+            const diffTime = Math.abs(now - dob);
+            return Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+        }
+
+        // Calculate current calendar week
+        function getCurrentCalendarWeek() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 1);
+            const diff = now - start;
+            return Math.ceil(diff / (1000 * 60 * 60 * 24 * 7));
+        }
+
+        // Update notice area
+        function updateNotices() {
+            const now = new Date();
+            const dob = new Date(userData.dob);
+            
+            // Current date
+            document.getElementById('currentDate').innerHTML = `
+                <div class="notice-icon">
+                    <i class="fas fa-calendar"></i>
+                </div>
+                <div>
+                    <div class="notice-label">Current Date</div>
+                    <div class="notice-value">${now.toLocaleDateString()}</div>
+                </div>
+            `;
+
+            // Weeks left in month
+            const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            const weeksLeft = Math.ceil((lastDayOfMonth - now) / (1000 * 60 * 60 * 24 * 7));
+            document.getElementById('weeksLeft').innerHTML = `
+            <div class="notice-icon">
+                    <i class="fas fa-hourglass"></i>
+                </div>
+                <div>
+                    <div class="notice-label">Weeks Left in Month</div>
+                    <div class="notice-value">${weeksLeft}</div>
+                </div>
+            `;
+
+            // Months left in year
+            const monthsLeft = 12 - now.getMonth() - 1;
+            document.getElementById('monthsLeft').innerHTML = `
+                <div class="notice-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div>
+                    <div class="notice-label">Months Left in Year</div>
+                    <div class="notice-value">${monthsLeft}</div>
+                </div>
+            `;
+
+            // Birthday notice
+            const nextBirthday = new Date(now.getFullYear(), dob.getMonth(), dob.getDate());
+            if (nextBirthday < now) {
+                nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+            }
+            const daysUntilBirthday = Math.ceil((nextBirthday - now) / (1000 * 60 * 60 * 24));
+            
+            let birthdayMessage = `Next Birthday: ${nextBirthday.toLocaleDateString()}`;
+            let birthdayIcon = 'fa-gift';
+            
+            if (daysUntilBirthday <= 90) {
+                birthdayMessage = `Birthday in ${daysUntilBirthday} days!`;
+                birthdayIcon = 'fa-cake-candles';
+            }
+
+            document.getElementById('birthdayNotice').innerHTML = `
+                <div class="notice-icon">
+                    <i class="fas ${birthdayIcon}"></i>
+                </div>
+                <div>
+                    <div class="notice-label">Birthday</div>
+                    <div class="notice-value">${birthdayMessage}</div>
+                </div>
+            `;
+        }
+
+        // Create calendar grid
+        function createCalendarGrid() {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            const weeksLived = calculateWeeksLived();
+            const totalWeeks = userData.lifespan * 52;
+
+            for (let year = 0; year < userData.lifespan; year++) {
+                const yearLabel = document.createElement('div');
+                yearLabel.className = 'year-label';
+                yearLabel.textContent = `Year ${year + 1}`;
+                grid.appendChild(yearLabel);
+
+                for (let week = 0; week < 52; week++) {
+                    const weekNumber = year * 52 + week;
+                    const weekBox = document.createElement('div');
+                    weekBox.className = 'week-box';
+                    
+                    if (weekNumber < weeksLived) {
+                        weekBox.classList.add('lived');
+                    }
+                    if (weekNumber === weeksLived) {
+                        weekBox.classList.add('current');
+                    }
+
+                    weekBox.addEventListener('mouseover', (e) => showTooltip(e, weekNumber));
+                    weekBox.addEventListener('mouseout', hideTooltip);
+                    weekBox.addEventListener('touchstart', (e) => showTooltip(e, weekNumber));
+                    weekBox.addEventListener('touchend', hideTooltip);
+
+                    grid.appendChild(weekBox);
+                }
+            }
+
+            // Center on current week with smooth scroll
+            setTimeout(() => {
+                const currentWeek = document.querySelector('.week-box.current');
+                if (currentWeek) {
+                    currentWeek.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            }, 100);
+        }
+
+        // Enhanced tooltip functions
+        function showTooltip(event, weekNumber) {
+            const tooltip = document.getElementById('tooltip');
+            const dob = new Date(userData.dob);
+            const weekStart = new Date(dob.getTime() + weekNumber * 7 * 24 * 60 * 60 * 1000);
+            const weekEnd = new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000);
+            const yearNumber = Math.floor(weekNumber / 52) + 1;
+            const weekInYear = (weekNumber % 52) + 1;
+
+            tooltip.innerHTML = `
+                <div style="font-weight: 600">Year ${yearNumber}, Week ${weekInYear}</div>
+                <div style="color: rgba(255,255,255,0.8)">
+                    ${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}
+                </div>
+            `;
+
+            const rect = event.target.getBoundingClientRect();
+            const tooltipX = rect.left + window.scrollX + rect.width + 10;
+            const tooltipY = rect.top + window.scrollY - 10;
+
+            tooltip.style.display = 'block';
+            tooltip.style.left = `${tooltipX}px`;
+            tooltip.style.top = `${tooltipY}px`;
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').style.display = 'none';
+        }
+
+        // Settings modal functions
+        function openSettings() {
+            document.getElementById('settingsModal').style.display = 'flex';
+            document.getElementById('nameInput').value = userData.name;
+            document.getElementById('dobInput').value = userData.dob;
+            document.getElementById('lifespanInput').value = userData.lifespan;
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').style.display = 'none';
+        }
+
+        function saveSettings() {
+            userData.name = document.getElementById('nameInput').value;
+            userData.dob = document.getElementById('dobInput').value;
+            userData.lifespan = parseInt(document.getElementById('lifespanInput').value);
+            saveUserData();
+            updateUI();
+            closeSettings();
+        }
+
+        // Update UI
+        function updateUI() {
+            document.getElementById('userName').textContent = userData.name;
+            const age = Math.floor((new Date() - new Date(userData.dob)) / (1000 * 60 * 60 * 24 * 365.25));
+            document.getElementById('userAge').textContent = `${age} years`;
+            document.getElementById('lifeWeek').textContent = `Week ${calculateWeeksLived()}`;
+            updateNotices();
+            createCalendarGrid();
+        }
+
+        // Mark day end
+        function markDayEnd() {
+            const notice = document.createElement('div');
+            notice.className = 'day-end-notice';
+            notice.innerHTML = `
+                <div class="notice-item" style="background: var(--accent-color); color: white;">
+                    <div class="notice-icon" style="color: var(--accent-color)">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div>Day completed! Great job!</div>
+                </div>
+            `;
+            document.querySelector('.notice-grid').prepend(notice);
+            setTimeout(() => notice.remove(), 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+            updateUI();
+            setInterval(updateNotices, 60000); // Update notices every minute
+        });
+
+        // Handle escape key for modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeSettings();
+        });
+    </script>
+</body>
+</html>
