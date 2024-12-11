@@ -165,17 +165,20 @@
         .calendar-container {
             background: var(--card-bg);
             border-radius: 1rem;
-            padding: 1.5rem;
+            padding: 1rem;
             box-shadow: var(--shadow);
             overflow-x: auto;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
         }
 
         .calendar-grid {
             display: grid;
-            grid-template-columns: repeat(52, 12px);
-            gap: 2px;
+            grid-template-columns: repeat(52, 16px);
+            gap: 4px;
             padding: 0.5rem;
+            justify-content: center;
         }
 
         .week-box {
@@ -305,8 +308,8 @@
             }
 
             .calendar-grid {
-                grid-template-columns: repeat(52, 10px);
-                gap: 1px;
+                grid-template-columns: repeat(52, 12px);
+                gap: 2px;
             }
 
             .week-box {
