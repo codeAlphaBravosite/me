@@ -50,7 +50,7 @@
             justify-content: space-between;
             align-items: center;
             /*backdrop-filter: blur(10px);*/
-            border: 2px solid #0f172a;
+            border: 1.5px solid #0f172a;
         }
 
         .user-info {
@@ -128,7 +128,7 @@
             padding: 1.5rem;
             margin-bottom: 1.5rem;
             /*box-shadow: var(--shadow);*/
-            border: 2px solid #0f172a;
+            border: 1.5px solid #0f172a;
         }
 
         .notice-grid {
@@ -169,7 +169,7 @@
             padding: 1rem;
             /*box-shadow: var(--shadow);*/
             overflow-x: auto;
-            border: 2px solid #0f172a;
+            border: 1.5px solid #0f172a;
             display: flex;
         }
 
@@ -531,11 +531,18 @@
             const noticeGrid = document.querySelector('.notice-grid');
             noticeGrid.insertBefore(notice, noticeGrid.firstChild);
             
-            // Remove after 5 seconds
+            // Calculate milliseconds until the end of today
+             
+            const noi = new Date();
+            const endOfDayy = new Date(noi.getFullYear(), noi.getMonth(), noi.getDate() + 1, 0, 0, 0, 0);
+            const msUntilEndOfDay = endOfDayy - now;
+
+            // Remove at the end of today
             setTimeout(() => {
-                notice.remove();
-            }, 5000);
-        }
+               notice.remove();
+                 }, msUntilEndOfDay);
+            
+              }
 
         // Update notices
 
