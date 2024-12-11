@@ -176,14 +176,15 @@
         }
 
         .yeartext {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align each character */
+    font-size: 1rem;
+    color: #64748b;
+    writing-mode: vertical-lr; /* Change text writing mode to vertical */
+    text-orientation: upright; /* Make sure text appears upright */
+}
 
-            display: flex;
-            flex-direction: column;
-            /*margin: 2;*/
-            font-size: 1rem;
-            color: #64748b;
-
-        }
        
 .year-labels {
     display: flex;
