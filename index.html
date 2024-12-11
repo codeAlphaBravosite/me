@@ -176,14 +176,13 @@
         }
 
         .yeartext {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center align each character */
+    transform: rotate(90deg); /* Rotate the text 90 degrees */
+    transform-origin: left bottom; /* Adjust rotation point for alignment */
     font-size: 1rem;
     color: #64748b;
-    writing-mode: vertical-lr; /* Change text writing mode to vertical */
-    text-orientation: upright; /* Make sure text appears upright */
-}
+    display: inline-block; /* Ensure proper rotation behavior */
+        }
+        
 
        
 .year-labels {
@@ -419,7 +418,7 @@
         <!-- Calendar Grid -->
         <!-- Update the calendar-container div in your HTML -->
            <div class="calendar-container">
-               <p class="yeartext">YEARS OF YOUR LIFE</p>
+               <div class="yeartext">YEARS OF YOUR LIFE</div>
          <div class="year-labels" id="yearLabels"></div>
          <div class="calendar-content">
         <div class="week-labels" id="weekLabels"></div>
