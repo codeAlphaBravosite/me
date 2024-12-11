@@ -165,13 +165,51 @@
         /* Modern Calendar Grid */
         .calendar-container {
             /*background: var(--card-bg);*/
+            position: relative;
             border-radius: 1rem;
-            padding: 1rem;
+            padding: 2rem 3rem;
             /*box-shadow: var(--shadow);*/
             overflow-x: auto;
             border: 1.5px solid #0f172a;
             display: flex;
         }
+
+       .year-labels {
+           position: absolute;
+           left: 0.5rem;
+           top: 3rem; /* Align with calendar grid start */
+           display: flex;
+           flex-direction: column;
+           gap: 4px;
+        }
+
+       .year-label {
+           height: 14px;
+           line-height: 14px;
+           font-size: 0.7rem;
+           color: #64748b;
+        }
+
+      .month-labels {
+          position: absolute;
+          left: 3rem;
+          top: 0.5rem;
+          display: flex;
+          gap: 4px;
+         }
+
+        .month-label {
+           width: 52px; /* Adjust based on 4 weeks + gaps */
+           font-size: 0.7rem;
+           color: #64748b;
+           text-align: center;
+         }
+
+         .calendar-wrapper {
+           display: flex; 
+           margin-left: 2rem; /* Space for year labels */
+           margin-top: 1.5rem; /* Space for month labels */
+           }
 
         .calendar-grid {
             display: grid;
