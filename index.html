@@ -197,16 +197,24 @@
 }
         
 .week-labels {
-    display: grid;
+    /*display: grid;
     grid-template-columns: repeat(52, minmax(7px, auto));
     gap: 3.5px;
+    margin-left: 0.68rem;*/
+    display: flex;
+    flex-direction: row;
+    gap: 4px; /* Space between items */
     margin-left: 0.68rem;
 }
 
 .week-label {
+    /*font-size: 0.7rem;
+    color: #64748b;
+    text-align: center;*/
+    flex: 0 0 10px; /* Fixed width for each item */
     font-size: 0.7rem;
     color: #64748b;
-    /*text-align: center;*/
+    text-align: center;
 }
 
         .calendar-grid {
