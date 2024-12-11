@@ -166,12 +166,52 @@
         .calendar-container {
             /*background: var(--card-bg);*/
             border-radius: 1rem;
-            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
             /*box-shadow: var(--shadow);*/
             overflow-x: auto;
             border: 1.5px solid #0f172a;
             display: flex;
         }
+       
+.year-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 1.5rem; /* Align with grid start */
+}
+
+.year-label {
+    height: 14px;
+    line-height: 14px;
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+.calendar-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.week-labels {
+    display: grid;
+    grid-template-columns: repeat(52, 12px);
+    gap: 4px;
+    margin-left: 0.5rem;
+}
+
+.week-label {
+    font-size: 0.7rem;
+    color: #64748b;
+    text-align: center;
+}
+
+.calendar-grid {
+    margin-top: 0.5rem;
+}
 
         .calendar-grid {
             display: grid;
@@ -369,10 +409,15 @@
         </div>
 
         <!-- Calendar Grid -->
-        <div class="calendar-container">
-            <div class="calendar-grid" id="calendarGrid"></div>
-        </div>
+        <!-- Update the calendar-container div in your HTML -->
+           <div class="calendar-container">
+         <div class="year-labels" id="yearLabels"></div>
+         <div class="calendar-content">
+        <div class="week-labels" id="weekLabels"></div>
+        <div class="calendar-grid" id="calendarGrid"></div>
     </div>
+</div>
+
 
     <!-- Settings Modal -->
     <div class="modal" id="settingsModal">
@@ -390,95 +435,121 @@
     <div class="tooltip" id="tooltip"></div>
 
     <script>
+
         // User data structure
-        let userData = {
-            name: 'John Doe',
-            dob: '1999-01-01',
-            lifespan: 90
-        };
+let userData = {
+    name: 'John Doe',
+    dob: '1999-01-01',
+    lifespan: 90
+};
 
-        // Load data from localStorage
-        function loadUserData() {
-            const savedData = localStorage.getItem('lifeCalendarData');
-            if (savedData) {
-                userData = JSON.parse(savedData);
-                updateUserCard();
-                generateCalendar();
-            }
+// Load data from localStorage
+function loadUserData() {
+    const savedData = localStorage.getItem('lifeCalendarData');
+    if (savedData) {
+        userData = JSON.parse(savedData);
+        updateUserCard();
+        generateCalendar();
+    }
+}
+
+// Save data to localStorage
+function saveUserData() {
+    localStorage.setItem('lifeCalendarData', JSON.stringify(userData));
+}
+
+// Calculate weeks lived
+function calculateWeeksLived() {
+    const dob = new Date(userData.dob);
+    const now = new Date();
+    const diffTime = Math.abs(now - dob);
+    return Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+}
+
+// Generate labels for the calendar
+function generateLabels() {
+    // Generate week labels
+    const weekLabels = document.getElementById('weekLabels');
+    weekLabels.innerHTML = '';
+    for (let week = 1; week <= 52; week++) {
+        const label = document.createElement('div');
+        label.className = 'week-label';
+        label.textContent = week;
+        weekLabels.appendChild(label);
+    }
+
+    // Generate year labels
+    const yearLabels = document.getElementById('yearLabels');
+    yearLabels.innerHTML = '';
+    for (let year = 0; year < userData.lifespan; year++) {
+        const label = document.createElement('div');
+        label.className = 'year-label';
+        label.textContent = year;
+        yearLabels.appendChild(label);
+    }
+}
+
+// Generate calendar grid
+function generateCalendar() {
+    generateLabels(); // Add labels before generating the grid
+    
+    const grid = document.getElementById('calendarGrid');
+    grid.innerHTML = '';
+    const weeksLived = calculateWeeksLived();
+    const totalWeeks = userData.lifespan * 52;
+
+    for (let week = 0; week < totalWeeks; week++) {
+        const weekBox = document.createElement('div');
+        weekBox.className = 'week-box';
+        
+        if (week < weeksLived) {
+            weekBox.classList.add('week-lived');
+        } else if (week === weeksLived) {
+            weekBox.classList.add('week-current');
+        } else {
+            weekBox.classList.add('week-future');
         }
 
-        // Save data to localStorage
-        function saveUserData() {
-            localStorage.setItem('lifeCalendarData', JSON.stringify(userData));
-        }
+        // Add week information for tooltip
+        weekBox.setAttribute('data-week', week + 1);
+        weekBox.setAttribute('data-dates', getWeekDates(week));
+        
+        weekBox.addEventListener('mouseover', showTooltip);
+        weekBox.addEventListener('mouseout', hideTooltip);
+        
+        grid.appendChild(weekBox);
+    }
 
-        // Calculate weeks lived
-        function calculateWeeksLived() {
-            const dob = new Date(userData.dob);
-            const now = new Date();
-            const diffTime = Math.abs(now - dob);
-            return Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
-        }
+    // Scroll to current week
+    const currentWeek = document.querySelector('.week-current');
+    if (currentWeek) {
+        currentWeek.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
 
-        // Generate calendar grid
-        function generateCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            grid.innerHTML = '';
-            const weeksLived = calculateWeeksLived();
-            const totalWeeks = userData.lifespan * 52;
+// Get dates for specific week
+function getWeekDates(weekNumber) {
+    const dob = new Date(userData.dob);
+    const weekStart = new Date(dob.getTime() + weekNumber * 7 * 24 * 60 * 60 * 1000);
+    const weekEnd = new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000);
+    return `${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
+}
 
-            for (let week = 0; week < totalWeeks; week++) {
-                const weekBox = document.createElement('div');
-                weekBox.className = 'week-box';
-                
-                if (week < weeksLived) {
-                    weekBox.classList.add('week-lived');
-                } else if (week === weeksLived) {
-                    weekBox.classList.add('week-current');
-                } else {
-                    weekBox.classList.add('week-future');
-                }
+// Tooltip functions
+function showTooltip(e) {
+    const tooltip = document.getElementById('tooltip');
+    tooltip.innerHTML = `Week ${e.target.getAttribute('data-week')}<br>${e.target.getAttribute('data-dates')}`;
+    tooltip.style.display = 'block';
+    tooltip.style.left = e.pageX + 10 + 'px';
+    tooltip.style.top = e.pageY + 10 + 'px';
+}
 
-                // Add week information for tooltip
-                weekBox.setAttribute('data-week', week + 1);
-                weekBox.setAttribute('data-dates', getWeekDates(week));
-                
-                weekBox.addEventListener('mouseover', showTooltip);
-                weekBox.addEventListener('mouseout', hideTooltip);
-                
-                grid.appendChild(weekBox);
-            }
+function hideTooltip() {
+    document.getElementById('tooltip').style.display = 'none';
+}
 
-            // Scroll to current week
-            const currentWeek = document.querySelector('.week-current');
-            if (currentWeek) {
-                currentWeek.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-
-        // Get dates for specific week
-        function getWeekDates(weekNumber) {
-            const dob = new Date(userData.dob);
-            const weekStart = new Date(dob.getTime() + weekNumber * 7 * 24 * 60 * 60 * 1000);
-            const weekEnd = new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000);
-            return `${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
-        }
-
-        // Tooltip functions
-        function showTooltip(e) {
-            const tooltip = document.getElementById('tooltip');
-            tooltip.innerHTML = `Week ${e.target.getAttribute('data-week')}<br>${e.target.getAttribute('data-dates')}`;
-            tooltip.style.display = 'block';
-            tooltip.style.left = e.pageX + 10 + 'px';
-            tooltip.style.top = e.pageY + 10 + 'px';
-        }
-
-        function hideTooltip() {
-            document.getElementById('tooltip').style.display = 'none';
-        }
-
-        // Update user card information
-        function updateUserCard() {
+// Update user card information
+function updateUserCard() {
     document.getElementById('userName').textContent = userData.name;
     const age = calculateAge();
     document.getElementById('userAge').textContent = `Age: ${age}`;
@@ -493,46 +564,44 @@
     document.getElementById('userDOB').textContent = `DOB: ${dobFormatted}`;
 }
 
+// Calculate age
+function calculateAge() {
+    const dob = new Date(userData.dob);
+    const now = new Date();
+    let age = now.getFullYear() - dob.getFullYear();
+    const monthDiff = now.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < dob.getDate())) {
+        age--;
+    }
+    return age;
+}
 
+// Modal functions
+function openModal() {
+    document.getElementById('settingsModal').style.display = 'flex';
+    document.getElementById('nameInput').value = userData.name;
+    document.getElementById('dobInput').value = userData.dob;
+    document.getElementById('lifespanInput').value = userData.lifespan;
+}
 
-        // Calculate age
-        function calculateAge() {
-            const dob = new Date(userData.dob);
-            const now = new Date();
-            let age = now.getFullYear() - dob.getFullYear();
-            const monthDiff = now.getMonth() - dob.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < dob.getDate())) {
-                age--;
-            }
-            return age;
-        }
+function closeModal() {
+    document.getElementById('settingsModal').style.display = 'none';
+}
 
-        // Modal functions
-        function openModal() {
-            document.getElementById('settingsModal').style.display = 'flex';
-            document.getElementById('nameInput').value = userData.name;
-            document.getElementById('dobInput').value = userData.dob;
-            document.getElementById('lifespanInput').value = userData.lifespan;
-        }
+function saveSettings() {
+    userData.name = document.getElementById('nameInput').value;
+    userData.dob = document.getElementById('dobInput').value;
+    userData.lifespan = parseInt(document.getElementById('lifespanInput').value);
+    
+    saveUserData();
+    updateUserCard();
+    generateCalendar();
+    updateNotices();
+    closeModal();
+}
 
-        function closeModal() {
-            document.getElementById('settingsModal').style.display = 'none';
-        }
-
-        function saveSettings() {
-            userData.name = document.getElementById('nameInput').value;
-            userData.dob = document.getElementById('dobInput').value;
-            userData.lifespan = parseInt(document.getElementById('lifespanInput').value);
-            
-            saveUserData();
-            updateUserCard();
-            generateCalendar();
-            updateNotices();
-            closeModal();
-        }
-
-        // Day End function
-        function markDayEnd() {
+// Day End function
+function markDayEnd() {
     const notice = document.createElement('div');
     notice.className = 'notice-item';
 
@@ -561,54 +630,53 @@
     }, msUntilEndOfDay);
 }
 
+// Update notices
+function updateNotices() {
+    const now = new Date();
+    
+    // Current date
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+    
+    // Weeks left in month
+    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const weeksLeft = Math.ceil((lastDayOfMonth.getDate() - now.getDate()) / 7);
+    document.getElementById('weeksLeftMonth').textContent = `${weeksLeft} weeks`;
+    
+    // Months left in year
+    const monthsLeft = 12 - (now.getMonth() + 1);
+    document.getElementById('monthsLeftYear').textContent = `${monthsLeft} months`;
+    
+    // Birthday countdown - only show if within 2 months
+    const birthday = new Date(userData.dob);
+    const nextBirthday = new Date(now.getFullYear(), birthday.getMonth(), birthday.getDate());
+    
+    if (nextBirthday < now) {
+        nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+    }
+    
+    const daysUntilBirthday = Math.ceil((nextBirthday - now) / (1000 * 60 * 60 * 24));
+    const birthdayNotice = document.getElementById('birthdayCountdown');
+    
+    if (daysUntilBirthday <= 60) {
+        birthdayNotice.parentElement.style.display = 'block';
+        birthdayNotice.textContent = `${daysUntilBirthday} days until your birthday!`;
+    } else {
+        birthdayNotice.parentElement.style.display = 'none';
+    }
+}
 
-        // Update notices
-
-        function updateNotices() {
-            const now = new Date();
-            
-            // Current date
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            
-            // Weeks left in month
-            const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-            const weeksLeft = Math.ceil((lastDayOfMonth.getDate() - now.getDate()) / 7);
-            document.getElementById('weeksLeftMonth').textContent = `${weeksLeft} weeks`;
-            
-            // Months left in year
-            const monthsLeft = 12 - (now.getMonth() + 1);
-            document.getElementById('monthsLeftYear').textContent = `${monthsLeft} months`;
-            
-            // Birthday countdown - only show if within 2 months
-            const birthday = new Date(userData.dob);
-            const nextBirthday = new Date(now.getFullYear(), birthday.getMonth(), birthday.getDate());
-            
-            if (nextBirthday < now) {
-                nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
-            }
-            
-            const daysUntilBirthday = Math.ceil((nextBirthday - now) / (1000 * 60 * 60 * 24));
-            const birthdayNotice = document.getElementById('birthdayCountdown');
-            
-            if (daysUntilBirthday <= 60) {
-                birthdayNotice.parentElement.style.display = 'block';
-                birthdayNotice.textContent = `${daysUntilBirthday} days until your birthday!`;
-            } else {
-                birthdayNotice.parentElement.style.display = 'none';
-            }
-        }
-
-        // Initialize the app
-        window.addEventListener('load', () => {
-            loadUserData();
-            updateNotices();
-            setInterval(updateNotices, 60000); // Update notices every minute
-        });
+// Initialize the app
+window.addEventListener('load', () => {
+    loadUserData();
+    updateNotices();
+    setInterval(updateNotices, 60000); // Update notices every minute
+});
+        
     </script>
 </body>
 </html>
