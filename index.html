@@ -176,14 +176,12 @@
         }
 
         .yeartext {
-    transform: rotate(90deg); /* Rotate the text 90 degrees */
-    transform-origin: left bottom; /* Adjust rotation point for alignment */
+    writing-mode: vertical-lr; /* Display text vertically */
+    text-orientation: mixed; /* Keep the text readable */
     font-size: 1rem;
     color: #64748b;
-    /*display: inline-block; Ensure proper rotation behavior */
         }
         
-
        
 .year-labels {
     display: flex;
