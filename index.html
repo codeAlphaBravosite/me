@@ -525,7 +525,7 @@
         function markDayEnd() {
             const notice = document.createElement('div');
             notice.className = 'notice-item';
-            notice.innerHTML = `<h4>Day End Marked</h4><p>You've completed another day! (${new Date().toLocaleDateString()})</p>`;
+            notice.innerHTML = `<h4>Day Completed</h4><p>You've completed another day! (${new Date().toLocaleDateString()})</p>`;
             
             // Insert at the beginning of the notice grid
             const noticeGrid = document.querySelector('.notice-grid');
