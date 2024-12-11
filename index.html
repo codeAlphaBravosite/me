@@ -175,14 +175,17 @@
             display: flex;
         }
 
+        .months-container {
+            display: flex;
+            gap: 20px; /* Adjust gap size as needed */
+            flex-wrap: wrap; /* Ensures months wrap to the next line if necessary */
+        }
         .month {
-            /*padding: 10px 20px;
+            padding: 10px 20px;
             background-color: #f0f0f0;
             border: 1px solid #ccc;
-            border-radius: 5px;*/
+            border-radius: 5px;
             text-align: center;
-            color: #64748b;
-            font-size: 0.7rem;
         }
 
         .yeartext {
@@ -436,20 +439,22 @@
         <!-- Calendar Grid -->
         <!-- Update the calendar-container div in your HTML -->
            <div class="calendar-container">
-               <p class="yeartext">YEARS OF YOUR LIFE    ------> </p>
+               <div class="yeartext">YEARS OF YOUR LIFE    ------> </div>
                
-        <p class="month">Jan</p>
-        <p class="month">Feb</p>
-        <p class="month">Mar</p>
-        <p class="month">Apr</p>
-        <p class="month">May</p>
-        <p class="month">Jun</p>
-        <p class="month">Jul</p>
-        <p class="month">Aug</p>
-        <p class="month">Sep</p>
-        <p class="month">Oct</p>
-        <p class="month">Nov</p>
-        <p class="month">Dec</p>
+        <div class="months-container">
+        <div class="month">Jan</div>
+        <div class="month">Feb</div>
+        <div class="month">Mar</div>
+        <div class="month">Apr</div>
+        <div class="month">May</div>
+        <div class="month">Jun</div>
+        <div class="month">Jul</div>
+        <div class="month">Aug</div>
+        <div class="month">Sep</div>
+        <div class="month">Oct</div>
+        <div class="month">Nov</div>
+        <div class="month">Dec</div>
+    </div>
                
          <div class="year-labels" id="yearLabels"></div>
          <div class="calendar-content">
