@@ -479,11 +479,20 @@
 
         // Update user card information
         function updateUserCard() {
-            document.getElementById('userName').textContent = userData.name;
-            const age = calculateAge();
-            document.getElementById('userAge').textContent = `Age: ${age}`;
-            document.getElementById('userDOB').textContent = `DOB: ${new Date(userData.dob).toLocaleDateString()}`;
-        }
+    document.getElementById('userName').textContent = userData.name;
+    const age = calculateAge();
+    document.getElementById('userAge').textContent = `Age: ${age}`;
+
+    // Format the DOB to day/month/year
+    const dobFormatted = new Date(userData.dob).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+
+    document.getElementById('userDOB').textContent = `DOB: ${dobFormatted}`;
+}
+
 
         // Calculate age
         function calculateAge() {
