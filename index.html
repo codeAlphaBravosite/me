@@ -693,6 +693,8 @@ function updateNotices() {
     const birthday = new Date(userData.dob);
     const birthdayNotice = document.getElementById('birthdayCountdown');
     const birthdayNoticeContainer = birthdayNotice.parentElement;
+    const birthdayTitle = birthdayNoticeContainer.querySelector('h4');
+    
     
     // Check if today is the birthday
     const isToday = now.getMonth() === birthday.getMonth() && now.getDate() === birthday.getDate();
@@ -700,6 +702,8 @@ function updateNotices() {
     if (isToday) {
         // Calculate current age
         const age = now.getFullYear() - birthday.getFullYear();
+
+        birthdayTitle.textContent = 'Happy Birthday, ${userData.name}!';
         
         // Show birthday celebration
         birthdayNoticeContainer.style.display = 'block';
