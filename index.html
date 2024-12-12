@@ -175,38 +175,6 @@
             display: flex;
         }
 
-        .months-container {
-
-            display: flex;
-           flex-direction: row;
-            /*gap: 10px;*/
-            padding-top: 1rem;
-            padding-left: 1.98rem;
-
-        }
-
-        
-        .month {
-            font-size: 0.7rem;
-    color: #64748b;
-            /*margin-right: 1rem;*/
-            text-align: left;
-            
-            
-        }
-
-        .month:nth-child(1) { margin-right: 2.4rem; } /* January */
-        .month:nth-child(2) { margin-right: 2.8rem; } /* February */
-        .month:nth-child(3) { margin-right: 2.9rem; } /* March */
-        .month:nth-child(4) { margin-right: 2.9rem; } /* April */
-        .month:nth-child(5) { margin-right: 2.9rem; } /* May */
-        .month:nth-child(6) { margin-right: 3rem; } /* June */
-        .month:nth-child(7) { margin-right: 3rem; } /* July */
-        .month:nth-child(8) { margin-right: 2.9rem; } /* August */
-        .month:nth-child(9) { margin-right: 2.9rem; } /* September */
-        .month:nth-child(10) { margin-right: 2.9rem; } /* October */
-        .month:nth-child(11) { margin-right: 2.9rem; } /* November */
-        .month:last-child { margin-right: 0; } /* December */
 
         .yeartext {
     writing-mode: vertical-lr; /* Display text vertically */
@@ -246,8 +214,6 @@
     flex-direction: column;
     gap: 0.5rem;
 }
-
-        /*
         
 .week-labels {
     display: grid;
@@ -260,34 +226,8 @@
 .week-label {
     font-size: 0.7rem;
     color: #64748b;
-    text-align: center; off this 
-} */
-
-        .week-labels {
-    display: grid;
-    grid-template-columns: repeat(52, 12px);
-    gap: 4px;
-    margin-left: 0.5rem;
-    margin-top: 0;
-    position: relative; /* Ensure proper positioning for pseudo-elements */
-}
-
-.week-label {
-    font-size: 0.7rem;
-    color: #64748b;
-    position: relative;
-}
-
-/* Apply a pseudo-element to underline every group of 4 labels */
-.week-label:nth-child(4n)::after {
-    content: '';
-    position: absolute;
-    right: 3.4px;
-    left: calc(-5px * 8.7); /* Adjust for 3 gaps */
-    bottom: -2px; /* Position underline below text */
-    height: 1px;
-    background-color: #64748b;
-}
+   /* text-align: center; */
+} 
         
         .calendar-grid {
             /*margin-top: 0.5rem;*/
@@ -491,21 +431,7 @@
                <div class="yeartext">YEARS OF YOUR LIFE    ------> </div>                            
          <div class="year-labels" id="yearLabels"></div>
          <div class="calendar-content">
-             <div class="weektext">WEEKS OF THE YEAR  ------> </div>
-             <div class="months-container">
-        <div class="month">Jan</div>
-        <div class="month">Feb</div>
-        <div class="month">Mar</div>
-        <div class="month">Apr</div>
-        <div class="month">May</div>
-        <div class="month">Jun</div>
-        <div class="month">Jul</div>
-        <div class="month">Aug</div>
-        <div class="month">Sep</div>
-        <div class="month">Oct</div>
-        <div class="month">Nov</div>
-        <div class="month">Dec</div>
-             </div>
+             <div class="weektext">WEEKS OF THE YEAR  ------> </div>             
         <div class="week-labels" id="weekLabels"></div>
         <div class="calendar-grid" id="calendarGrid"></div>
     </div>
