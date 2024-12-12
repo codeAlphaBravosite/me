@@ -1,7 +1,7 @@
 {
-  "name": "StoryboardPro",
-  "short_name": "StoryboardPro",
-  "description": "A powerful storyboarding app",
+  "name": "Me",
+  "short_name": "Me",
+  "description": "just an app",
   "start_url": "./index.html",
   "scope": ".",
   "display": "standalone",
