@@ -638,7 +638,7 @@ function markDayEnd() {
         year: 'numeric'
     });
 
-    notice.innerHTML = `<h4>Day Completed</h4><p>You've completed another day! ${formattedDate}</p>`;
+    notice.innerHTML = `<h4 class="notice-item">Day Completed</h4><p class="notice-item">You've completed another day! ${formattedDate}</p>`;
     
     // Insert at the beginning of the notice grid
     const noticeGrid = document.querySelector('.notice-grid');
