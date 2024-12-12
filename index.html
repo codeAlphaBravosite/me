@@ -246,6 +246,8 @@
     flex-direction: column;
     gap: 0.5rem;
 }
+
+        /*
         
 .week-labels {
     display: grid;
@@ -258,14 +260,35 @@
 .week-label {
     font-size: 0.7rem;
     color: #64748b;
-    /*text-align: center;*/
+    text-align: center; off this 
+} */
+
+        .week-labels {
+    display: grid;
+    grid-template-columns: repeat(52, 12px);
+    gap: 4px;
+    margin-left: 0.5rem;
+    margin-top: 0;
+    position: relative; /* Ensure proper positioning for pseudo-elements */
 }
 
-  /* Apply underline only after every group of 4 labels */
-.week-label:nth-child(4n) {
-    border-bottom: 1px solid #64748b;
-    /*padding-bottom: 2px;  Optional for better spacing with underline */
+.week-label {
+    font-size: 0.7rem;
+    color: #64748b;
+    position: relative;
 }
+
+/* Apply a pseudo-element to underline every group of 4 labels */
+.week-label:nth-child(4n)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: calc(-4px * 3); /* Adjust for 3 gaps */
+    bottom: -2px; /* Position underline below text */
+    height: 1px;
+    background-color: #64748b;
+}
+        
         .calendar-grid {
             /*margin-top: 0.5rem;*/
             display: grid;
