@@ -743,6 +743,7 @@ function updateNotices() {
         // Show countdown if within 60 days
         if (daysUntilBirthday <= 60) {
             birthdayNoticeContainer.style.display = 'block';
+            birthdayTitle.textContent = birthdayTitle.textContent;
             birthdayNotice.textContent = `${daysUntilBirthday} days until your birthday!`;
         } else {
             birthdayNoticeContainer.style.display = 'none';
