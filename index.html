@@ -261,14 +261,11 @@
     /*text-align: center;*/
 }
 
-        /* Underline every label */
-.week-label:nth-child(4n-3),
-.week-label:nth-child(4n-2),
-.week-label:nth-child(4n-1),
+  /* Apply underline only after every group of 4 labels */
 .week-label:nth-child(4n) {
-    text-decoration: underline;
+    border-bottom: 1px solid #64748b;
+    /*padding-bottom: 2px;  Optional for better spacing with underline */
 }
-
         .calendar-grid {
             /*margin-top: 0.5rem;*/
             display: grid;
