@@ -688,23 +688,57 @@ function updateNotices() {
     // Months left in year
     const monthsLeft = 12 - (now.getMonth() + 1);
     document.getElementById('monthsLeftYear').textContent = `${monthsLeft} months`;
-
-    // Birthday countdown - only show if within 2 months
+    
+    // Birthday countdown and celebration
     const birthday = new Date(userData.dob);
-    const nextBirthday = new Date(now.getFullYear(), birthday.getMonth(), birthday.getDate());
-    
-    if (nextBirthday < now) {
-        nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
-    }
-    
-    const daysUntilBirthday = Math.ceil((nextBirthday - now) / (1000 * 60 * 60 * 24));
     const birthdayNotice = document.getElementById('birthdayCountdown');
+    const birthdayNoticeContainer = birthdayNotice.parentElement;
     
-    if (daysUntilBirthday <= 60) {
-        birthdayNotice.parentElement.style.display = 'block';
-        birthdayNotice.textContent = `${daysUntilBirthday} days until your birthday!`;
+    // Check if today is the birthday
+    const isToday = now.getMonth() === birthday.getMonth() && now.getDate() === birthday.getDate();
+    
+    if (isToday) {
+        // Calculate current age
+        const age = now.getFullYear() - birthday.getFullYear();
+        
+        // Show birthday celebration
+        birthdayNoticeContainer.style.display = 'block';
+        birthdayNoticeContainer.style.background = 'linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%)';
+        birthdayNoticeContainer.style.animation = 'pulse 2s infinite';
+        
+        // Array of celebratory messages
+        const celebrations = [
+            `🎉 Happy Birthday! You're ${age} years young today! 🎂`,
+            `🎈 Wishing you an amazing ${age}th year ahead! 🎊`,
+            `🎂 Happy ${age}th Birthday! Make it memorable! ✨`,
+            `🎊 ${age} years of awesome adventures! Here's to more! 🌟`,
+            `✨ Happy Birthday! ${age} looks great on you! 🎈`
+        ];
+        
+        // Randomly select a celebration message
+        const celebrationMessage = celebrations[Math.floor(Math.random() * celebrations.length)];
+        birthdayNotice.textContent = celebrationMessage;
+        
     } else {
-        birthdayNotice.parentElement.style.display = 'none';
+        // Reset styles if it's not birthday
+        birthdayNoticeContainer.style.background = '';
+        birthdayNoticeContainer.style.animation = '';
+        
+        // Calculate next birthday
+        const nextBirthday = new Date(now.getFullYear(), birthday.getMonth(), birthday.getDate());
+        if (nextBirthday < now) {
+            nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+        }
+        
+        const daysUntilBirthday = Math.ceil((nextBirthday - now) / (1000 * 60 * 60 * 24));
+        
+        // Show countdown if within 60 days
+        if (daysUntilBirthday <= 60) {
+            birthdayNoticeContainer.style.display = 'block';
+            birthdayNotice.textContent = `${daysUntilBirthday} days until your birthday!`;
+        } else {
+            birthdayNoticeContainer.style.display = 'none';
+        }
     }
 }
 
