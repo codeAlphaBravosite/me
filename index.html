@@ -670,18 +670,24 @@ function updateNotices() {
     const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
     const weeksLeft = Math.ceil((lastDayOfMonth.getDate() - now.getDate()) / 7);
     document.getElementById('weeksLeftMonth').textContent = `${weeksLeft} weeks`;
-    
-    // Months left in year
-    const monthsLeft = 12 - (now.getMonth() + 1);
-    document.getElementById('monthsLeftYear').textContent = `${monthsLeft} months`;
 
     // Calculate weeks left in life
     const dob = new Date(userData.dob);
     const totalWeeks = userData.lifespan * 52;
     const weeksLived = calculateWeeksLived();
     const weeksLeftLife = totalWeeks - weeksLived;
-    document.getElementById('weeksLeftLife').textContent = `${weeksLeftLife} weeks`;
     
+    // Convert weeks to months (approximate)
+    const monthsLeftLife = Math.floor(weeksLeftLife / 4.345); // 4.345 weeks per month on average
+    
+    // Format the output string
+    const weeksLeftText = `${weeksLeftLife} weeks (${monthsLeftLife} months)`;
+    document.getElementById('weeksLeftLife').textContent = weeksLeftText;
+    
+    // Months left in year
+    const monthsLeft = 12 - (now.getMonth() + 1);
+    document.getElementById('monthsLeftYear').textContent = `${monthsLeft} months`;
+
     // Birthday countdown - only show if within 2 months
     const birthday = new Date(userData.dob);
     const nextBirthday = new Date(now.getFullYear(), birthday.getMonth(), birthday.getDate());
