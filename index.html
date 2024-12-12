@@ -733,6 +733,8 @@ function updateNotices() {
         birthdayTitle.textContent = `Birthday Countdown`;
         birthdayNoticeContainer.querySelector('h4').style.color = '';
         birthdayNoticeContainer.querySelector('p').style.color = '';
+        birthdayNoticeContainer.querySelector('h4').style.textShadow = '';
+        birthdayNoticeContainer.querySelector('p').style.textShadow = '';
         
         // Calculate next birthday
         const nextBirthday = new Date(now.getFullYear(), birthday.getMonth(), birthday.getDate());
