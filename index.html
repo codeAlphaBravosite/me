@@ -702,7 +702,7 @@ function updateNotices() {
         // Calculate current age
         const age = now.getFullYear() - birthday.getFullYear();
 
-        birthdayTitle.textContent = 'Happy Birthday, ${userData.name}!';
+        birthdayTitle.textContent = `Happy Birthday, ${userData.name}!`;
         
         // Show birthday celebration
         birthdayNoticeContainer.style.display = 'block';
@@ -728,7 +728,7 @@ function updateNotices() {
         // Reset styles if it's not birthday
         birthdayNoticeContainer.style.background = '';
         birthdayNoticeContainer.style.animation = '';
-        birthdayTitle.textContent = birthdayTitle.textContent;
+        birthdayTitle.textContent = `Birthday Countdown`;
         birthdayNoticeContainer.querySelector('h4').style.color = '';
         birthdayNoticeContainer.querySelector('p').style.color = '';
         
@@ -742,8 +742,7 @@ function updateNotices() {
         
         // Show countdown if within 60 days
         if (daysUntilBirthday <= 60) {
-            birthdayNoticeContainer.style.display = 'block';
-            birthdayTitle.textContent = birthdayTitle.textContent;
+            birthdayNoticeContainer.style.display = 'block';            
             birthdayNotice.textContent = `${daysUntilBirthday} days until your birthday!`;
         } else {
             birthdayNoticeContainer.style.display = 'none';
