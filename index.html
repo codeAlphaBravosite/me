@@ -161,6 +161,18 @@
             font-size: 0.875rem;
         }
 
+        .msg-item {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .msg-item1 {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
         /* Modern Calendar Grid */
         .calendar-container {
             /*background: var(--card-bg);*/
@@ -638,7 +650,7 @@ function markDayEnd() {
         year: 'numeric'
     });
 
-    notice.innerHTML = `<h4 class="notice-item">Day Completed</h4><p class="notice-item">You've completed another day! ${formattedDate}</p>`;
+    notice.innerHTML = `<h4 class="msg-item">Day Completed</h4><p class="msg-item1">You've completed another day! ${formattedDate}</p>`;
     
     // Insert at the beginning of the notice grid
     const noticeGrid = document.querySelector('.notice-grid');
