@@ -161,17 +161,6 @@
             font-size: 0.875rem;
         }
 
-        /* When gradient background is applied */
-        #birthdayNoticeContainer {
-            color: white; /* Ensure text inherits white color */
-        }
-
-        #birthdayNoticeContainer h4,
-        #birthdayNoticeContainer p {
-            color: white; /* Set text color to white */
-         }
-        
-
         /* Modern Calendar Grid */
         .calendar-container {
             /*background: var(--card-bg);*/
@@ -716,6 +705,8 @@ function updateNotices() {
         birthdayNoticeContainer.style.display = 'block';
         birthdayNoticeContainer.style.background = 'linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%)';
         birthdayNoticeContainer.style.animation = 'pulse 2s infinite';
+        birthdayNoticeContainer.querySelector('h4').style.color = 'white';
+        birthdayNoticeContainer.querySelector('p').style.color = 'white';
         
         // Array of celebratory messages
         const celebrations = [
