@@ -504,8 +504,8 @@ function saveUserData() {
 function calculateWeeksLived() {
     const dob = new Date(userData.dob);
     const now = new Date();
-    const diffTime = Math.abs(now - dob);
-    return Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+    const diffDays = Math.floor((now - dob) / (1000 * 60 * 60 * 24));
+    return Math.floor(diffDays / 7);
 }
 
 // Generate labels for the calendar
