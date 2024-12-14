@@ -685,9 +685,22 @@ function updateNotices() {
     });
     
     // Weeks left in month
+    const now = new Date();
     const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    const weeksLeft = Math.ceil((lastDayOfMonth.getDate() - now.getDate()) / 7);
-    document.getElementById('weeksLeftMonth').textContent = `${weeksLeft} weeks`;
+    const daysLeft = lastDayOfMonth.getDate() - now.getDate();
+
+    // For a more precise calculation that considers partial weeks
+    const completeWeeks = Math.floor(daysLeft / 7);
+    const remainingDays = daysLeft % 7;
+
+    let weeksText;
+    if (completeWeeks === 0) {
+    weeksText = remainingDays > 0 ? "Less than 1 week" : "0 weeks";
+      } else {
+    weeksText = `${completeWeeks}${remainingDays > 0 ? '+' : ''} weeks`;
+      }
+
+    document.getElementById('weeksLeftMonth').textContent = weeksText;
 
     // Calculate weeks left in life
     const dob = new Date(userData.dob);
