@@ -531,18 +531,35 @@ function generateLabels() {
     }
 }
 
-// Generate calendar grid
 function generateCalendar() {
-    generateLabels(); // Add labels before generating the grid
+    generateLabels();
     
     const grid = document.getElementById('calendarGrid');
     grid.innerHTML = '';
     const weeksLived = calculateWeeksLived();
     const totalWeeks = userData.lifespan * 52;
+    
+    // Calculate which row (year) contains the current week
+    const currentYear = Math.floor(weeksLived / 52);
 
     for (let week = 0; week < totalWeeks; week++) {
         const weekBox = document.createElement('div');
         weekBox.className = 'week-box';
+        
+        // Calculate the row (year) for this week
+        const yearOfWeek = Math.floor(week / 52);
+        // Calculate the week number within the year (1-52)
+        const weekNumberInYear = (week % 52) + 1;
+        
+        // Only show week numbers for the row containing the current week
+        if (yearOfWeek === currentYear) {
+            weekBox.textContent = weekNumberInYear;
+            weekBox.style.fontSize = '8px';  // Make the number small enough to fit
+            weekBox.style.display = 'flex';
+            weekBox.style.alignItems = 'center';
+            weekBox.style.justifyContent = 'center';
+            weekBox.style.color = '#ffffff';  // White text for better visibility
+        }
         
         if (week < weeksLived) {
             weekBox.classList.add('week-lived');
@@ -552,7 +569,6 @@ function generateCalendar() {
             weekBox.classList.add('week-future');
         }
 
-        // Add week information for tooltip
         weekBox.setAttribute('data-week', week + 1);
         weekBox.setAttribute('data-dates', getWeekDates(week));
         
